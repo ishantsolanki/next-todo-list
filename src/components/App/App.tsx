@@ -9,6 +9,7 @@ export const App = () => {
     <ThemeProvider>
       <div className={classes.App}>
         <Header />
+        <hr className={classes.Divider}/>
       </div>
     </ThemeProvider>
   )
