@@ -19,6 +19,7 @@ const setupExpress = () => {
   )
 
   app.get('/createNewTodo', todos.createNewTodo)
+  app.get('/fetchTodos', todos.fetchTodos)
 }
 
 module.exports = setupExpress

@@ -14,12 +14,24 @@ const createNewTodo = (req, res) => {
   }).save((err, result) => {
     if (err) {
       res.sendStatus(400)
-      return
+      return false
     }
     res.json(result)
   })
 }
 
+const fetchTodos = (req, res) => {
+  Todo.find((err, result) => {
+    if (err) {
+      res.sendStatus(400)
+      return false
+    }
+
+    return res.json(result)
+  })
+}
+
 module.exports = {
   createNewTodo,
+  fetchTodos,
 }

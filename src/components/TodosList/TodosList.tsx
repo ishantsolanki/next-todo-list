@@ -1,35 +1,55 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { List, Record } from 'immutable'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import { createNewTodo } from '../../redux/actions/todoActions'
+import { createNewTodo, fetchTodos } from '../../redux/actions/todoActions'
+import { TodosType } from '../../types/Todos'
+import { ReduxState } from '../../redux/reducers/RootReducer'
 import { Grid, Paper, Button } from '@material-ui/core'
 import useStyles from './TodosList.styles'
 
-export const mapDispatchToProps = {
+const mapStateToProps = (state: ReduxState) => ({
+  todos: state.todos.list,
+})
+const mapDispatchToProps = {
   createNewTodoBound: createNewTodo,
+  fetchTodosBound: fetchTodos,
 }
 
 interface Props {
   createNewTodoBound: () => Promise<any>
+  fetchTodosBound: () => void
+  todos: List<Record<TodosType>>
 }
 
-export const TodosList: React.FC<Props> = ({ createNewTodoBound }) => {
+export const TodosList: React.FC<Props> = ({
+  createNewTodoBound,
+  fetchTodosBound,
+  todos,
+}) => {
   const classes = useStyles()
   const history = useHistory()
-
   const onCreateNew = () => {
-    createNewTodoBound().then((newTodo: { _id: string}) => {
+    createNewTodoBound().then((newTodo: { _id: string }) => {
       history.push(`/todos/${newTodo._id}`)
     })
   }
 
+  useEffect(() => {
+    fetchTodosBound()
+  }, [fetchTodosBound])
+
   return (
     <div className={classes.Grid}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper className={classes.Paper}>first list</Paper>
-        </Grid>
+        {todos &&
+          todos.map((todo) => (
+            <Grid item xs={12} key={todo.get('_id')}>
+              <Paper className={classes.Paper}>{todo.get('title')}</Paper>
+            </Grid>
+          ))}
+
         <Grid item xs={12}>
           <Button
             variant="outlined"
@@ -43,4 +63,4 @@ export const TodosList: React.FC<Props> = ({ createNewTodoBound }) => {
     </div>
   )
 }
-export default connect(null, mapDispatchToProps)(TodosList)
+export default connect(mapStateToProps, mapDispatchToProps)(TodosList)
