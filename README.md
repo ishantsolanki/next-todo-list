@@ -26,8 +26,8 @@ Hence, I reimplemented to using swr for achieving the same in considerably less 
 
 ### Next steps
 
-Update the UI every time data changes. Currently it doesnt happen as you expect and would require refreshes.
-Update the UI. I didnt spend much time beautifying this thing.
-Unit tests. Since change of approach, I couldnt contribute much time in writing them.
-I would go on to add an offline mode if given more time. This is a perfect candidate for it.
+Update the UI every time data changes. Currently it doesnt happen as you expect and would require refreshes.<br/>
+Update the UI. I didnt spend much time beautifying this thing.<br/>
+Unit tests. Since change of approach, I couldnt contribute much time in writing them.<br/>
+I would go on to add an offline mode if given more time. This is a perfect candidate for it.<br/>
 Also port it to react native.
