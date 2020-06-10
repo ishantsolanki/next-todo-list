@@ -1,22 +1,16 @@
-import React from 'react'
-import { Record } from 'immutable'
+import React, { useState, useEffect } from 'react'
 import { TodosType } from '../../types/Todos'
 import { connect } from 'react-redux'
+import { useDebounce } from 'use-debounce'
 
-import { getTodo } from '../../redux/selectors/todos'
 import { updateTitle } from '../../redux/actions/todoActions'
-import { ReduxState } from '../../redux/reducers/RootReducer'
-
-const mapStateToProps = (state: ReduxState, { id }: { id: string }) => ({
-  todo: getTodo(state)(id),
-})
 
 const mapDispatchToProps = {
   updateTitleBound: updateTitle,
 }
 
 interface Props {
-  todo: Record<TodosType> | undefined
+  todo: TodosType
   updateTitleBound: ({ _id, title }: { _id: string; title: string }) => void
 }
 
@@ -24,14 +18,15 @@ export const ChecklistEditor: React.FC<Props> = ({
   todo,
   updateTitleBound,
 }) => {
-  const handleTitleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    if (todo) {
-      updateTitleBound({
-        _id: todo.get('_id'),
-        title: event.currentTarget.value,
-      })
-    }
-  }
+  const [title, setTitle] = useState<string>(todo.title)
+  const [debouncedSearchTerm] = useDebounce(title, 500)
+
+  useEffect(() => {
+    updateTitleBound({
+      _id: todo._id,
+      title: debouncedSearchTerm,
+    })
+  }, [debouncedSearchTerm, todo._id, updateTitleBound])
   return (
     <>
       {todo && (
@@ -39,8 +34,8 @@ export const ChecklistEditor: React.FC<Props> = ({
           title:{' '}
           <input
             type="text"
-            value={todo.get('title')}
-            onChange={handleTitleChange}
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
           />
         </>
       )}
@@ -48,4 +43,4 @@ export const ChecklistEditor: React.FC<Props> = ({
   )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChecklistEditor)
+export default connect(null, mapDispatchToProps)(ChecklistEditor)

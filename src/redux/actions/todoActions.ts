@@ -29,8 +29,4 @@ type updateTitleType = ({
 
 export const updateTitle: updateTitleType = ({ _id, title }) => async (
   dispatch,
-) => {
-  const response = await updateTitleApi({ _id, title })
-  const responseJson = await response.json()
-  return dispatch(updateTitleSuccess(responseJson))
-}
+) => await updateTitleApi({ _id, title })

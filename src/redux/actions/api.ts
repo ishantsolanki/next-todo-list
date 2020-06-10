@@ -13,7 +13,11 @@ const corsMode: corsModeType = 'cors'
 export const createnewTodoApi: () => Promise<any> = () =>
   fetch(`${API_ENDPOINT}/createnewTodo`)
 
-export const fetchTodosApi = () => fetch(`${API_ENDPOINT}/fetchTodos`).then(res => res.json())
+export const fetchTodosApi = () =>
+  fetch(`${API_ENDPOINT}/fetchTodos`).then((res) => res.json())
+
+export const fetchTodoApi = (todoId: string) => () =>
+  fetch(`${API_ENDPOINT}/fetchTodo/${todoId}`).then((res) => res.json())
 
 const options = (_id: string, title: string) => ({
   method: 'POST',
