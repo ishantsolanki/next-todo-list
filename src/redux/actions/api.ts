@@ -1,4 +1,4 @@
-const API_ENDPOINT = process.env.REACT_APP_API_HOST
+export const API_ENDPOINT = process.env.REACT_APP_API_HOST
   ? `${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`
   : ''
 
@@ -13,7 +13,7 @@ const corsMode: corsModeType = 'cors'
 export const createnewTodoApi: () => Promise<any> = () =>
   fetch(`${API_ENDPOINT}/createnewTodo`)
 
-export const fetchTodosApi = () => fetch(`${API_ENDPOINT}/fetchTodos`)
+export const fetchTodosApi = () => fetch(`${API_ENDPOINT}/fetchTodos`).then(res => res.json())
 
 const options = (_id: string, title: string) => ({
   method: 'POST',

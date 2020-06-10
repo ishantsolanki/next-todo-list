@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { List, Record } from 'immutable'
 import { connect } from 'react-redux'
+import useSWR from 'swr'
 import { useHistory } from 'react-router-dom'
 
-import { createNewTodo, fetchTodos } from '../../redux/actions/todoActions'
+import { API_ENDPOINT, fetchTodosApi } from '../../redux/actions/api'
+
+import { createNewTodo } from '../../redux/actions/todoActions'
 import { TodosType } from '../../types/Todos'
 import { ReduxState } from '../../redux/reducers/RootReducer'
 import { Grid, Paper, Button } from '@material-ui/core'
@@ -14,20 +17,14 @@ const mapStateToProps = (state: ReduxState) => ({
 })
 const mapDispatchToProps = {
   createNewTodoBound: createNewTodo,
-  fetchTodosBound: fetchTodos,
 }
 
 interface Props {
   createNewTodoBound: () => Promise<any>
-  fetchTodosBound: () => void
   todos: List<Record<TodosType>>
 }
 
-export const TodosList: React.FC<Props> = ({
-  createNewTodoBound,
-  fetchTodosBound,
-  todos,
-}) => {
+export const TodosList: React.FC<Props> = ({ createNewTodoBound }) => {
   const classes = useStyles()
   const history = useHistory()
   const onCreateNew = () => {
@@ -40,21 +37,22 @@ export const TodosList: React.FC<Props> = ({
     history.push(`/todos/${id}`)
   }
 
-  useEffect(() => {
-    fetchTodosBound()
-  }, [fetchTodosBound])
+  const response: { data?: TodosType[] } = useSWR(
+    `${API_ENDPOINT}/fetchTodos`,
+    fetchTodosApi,
+  )
 
   return (
     <div className={classes.Grid}>
       <Grid container spacing={3}>
-        {todos &&
-          todos.map((todo) => (
-            <Grid item xs={12} key={todo.get('_id')}>
+        {response.data &&
+          response.data.map((todo) => (
+            <Grid item xs={12} key={todo._id}>
               <Paper
                 className={classes.Paper}
-                onClick={handleItemClick(todo.get('_id'))}
+                onClick={handleItemClick(todo._id)}
               >
-                {todo.get('title')}
+                {todo.title}
               </Paper>
             </Grid>
           ))}
