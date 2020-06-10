@@ -15,10 +15,10 @@ export const initialState = {
 const fetchTodosSuccessReducer = (
   state: TodosReducerType,
   { response }: { response: TodosType[] },
-) => {
-  return {
-    ...state,
-    list: response.map(
+) => ({
+  ...state,
+  list: List([
+    ...response.map(
       (todo) =>
         new TodosRecord({
           _id: todo._id,
@@ -35,6 +35,19 @@ const fetchTodosSuccessReducer = (
           ]),
         }),
     ),
+  ]),
+})
+
+const updateTitleReducer = (
+  state: TodosReducerType,
+  { response }: { response: TodosType },
+) => {
+  return {
+    ...state,
+    list: state.list.update(
+      state.list.findIndex((item) => item.get('_id') === response._id),
+      (e) => e.set('title', response.title),
+    ),
   }
 }
 
@@ -43,6 +56,10 @@ const TodosReducer = createReducer(initialState, {
     state: TodosReducerType,
     action: { response: TodosType[] },
   ) => fetchTodosSuccessReducer(state, action),
+  [todoTypes.UPDATE_TITLE_SUCCESS]: (
+    state: TodosReducerType,
+    action: { response: TodosType },
+  ) => updateTitleReducer(state, action),
 })
 
 export default TodosReducer

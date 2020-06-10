@@ -31,7 +31,23 @@ const fetchTodos = (req, res) => {
   })
 }
 
+const updateTitle = (req, res) => {
+  const { _id, title } = req.body
+
+  Todo.findOneAndUpdate({ _id }, { title }).then(() => {
+    Todo.findOne({ _id }, (err, result) => {
+      if (err) {
+        res.sendStatus(400)
+        return false
+      }
+
+      return res.json(result)
+    })
+  })
+}
+
 module.exports = {
   createNewTodo,
   fetchTodos,
+  updateTitle,
 }

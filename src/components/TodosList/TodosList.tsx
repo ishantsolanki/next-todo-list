@@ -36,6 +36,10 @@ export const TodosList: React.FC<Props> = ({
     })
   }
 
+  const handleItemClick = (id: string) => () => {
+    history.push(`/todos/${id}`)
+  }
+
   useEffect(() => {
     fetchTodosBound()
   }, [fetchTodosBound])
@@ -46,7 +50,12 @@ export const TodosList: React.FC<Props> = ({
         {todos &&
           todos.map((todo) => (
             <Grid item xs={12} key={todo.get('_id')}>
-              <Paper className={classes.Paper}>{todo.get('title')}</Paper>
+              <Paper
+                className={classes.Paper}
+                onClick={handleItemClick(todo.get('_id'))}
+              >
+                {todo.get('title')}
+              </Paper>
             </Grid>
           ))}
 

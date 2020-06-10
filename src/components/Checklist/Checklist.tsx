@@ -1,22 +1,12 @@
 import React from 'react'
-import { Record } from 'immutable'
+import { useParams } from 'react-router-dom'
 
-import { connect } from 'react-redux'
+import ChecklistEditor from '../ChecklistEditor/ChecklistEditor'
 
-import { TodosType } from '../../types/Todos'
-import { ReduxState } from '../../redux/reducers/RootReducer'
-import { getTodo } from '../../redux/selectors/todos'
+export const Checklist: React.FC<{}> = () => {
+  const { todoId } = useParams()
 
-export const mapStateToProps = (state: ReduxState, { id }: { id: string }) => ({
-  todo: getTodo(state)(id),
-})
-
-interface Props {
-  todo: Record<TodosType> | undefined
+  return <ChecklistEditor id={todoId} />
 }
 
-export const Checklist: React.FC<Props> = ({ todo }) => {
-  return <div>{todo && <>"title: " {todo.get('title')}</>}</div>
-}
-
-export default connect(mapStateToProps)(Checklist)
+export default Checklist

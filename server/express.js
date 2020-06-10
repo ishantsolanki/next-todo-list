@@ -20,6 +20,7 @@ const setupExpress = () => {
 
   app.get('/createNewTodo', todos.createNewTodo)
   app.get('/fetchTodos', todos.fetchTodos)
+  app.post('/updateTitle', todos.updateTitle)
 }
 
 module.exports = setupExpress
