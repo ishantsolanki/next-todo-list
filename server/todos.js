@@ -8,7 +8,7 @@ const checklistSchema = new mongoose.Schema({
 
 const todosSchema = new mongoose.Schema({
   title: String,
-  checklist: [checklistSchema],
+  checklist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Checklist' }],
 })
 
 const Todo = new mongoose.model('Todo', todosSchema)
@@ -27,26 +27,30 @@ const createNewTodo = (req, res) => {
 }
 
 const fetchTodos = (req, res) => {
-  Todo.find((err, result) => {
-    if (err) {
-      res.sendStatus(400)
-      return false
-    }
+  Todo.find()
+    .populate('checklist')
+    .exec((err, result) => {
+      if (err) {
+        res.sendStatus(400)
+        return false
+      }
 
-    return res.json(result)
-  })
+      return res.json(result)
+    })
 }
 
 const fetchTodo = (req, res) => {
   const { todoId } = req.params
-  Todo.findById(todoId, (err, result) => {
-    if (err) {
-      res.sendStatus(400)
-      return false
-    }
+  Todo.findById(todoId)
+    .populate('checklist')
+    .exec((err, result) => {
+      if (err) {
+        res.sendStatus(400)
+        return false
+      }
 
-    return res.json(result)
-  })
+      return res.json(result)
+    })
 }
 
 const updateTitle = (req, res) => {
@@ -72,11 +76,30 @@ const addNewChecklist = (req, res) => {
       res.sendStatus(400)
       return false
     }
+    new Checklist({ content: '', checked: false }).save((err, result) => {
+      if (err) {
+        res.sendStatus(400)
+        return false
+      }
 
-    todo.checklist.push(new Checklist({ content: '', checked: false }))
-    todo.save()
+      if (result) {
+        todo.checklist.push(result._id)
+        todo.save()
+        return res.json(todo)
+      }
+    })
+  })
+}
 
-    return res.json(todo)
+const updateChecklistContent = (req, res) => {
+  const { _id, content } = req.body
+
+  Checklist.findByIdAndUpdate(_id, { content }, (err, checklist) => {
+    if (err) {
+      res.sendStatus(400)
+      return false
+    }
+    return res.json(checklist)
   })
 }
 
@@ -86,4 +109,5 @@ module.exports = {
   fetchTodo,
   updateTitle,
   addNewChecklist,
+  updateChecklistContent,
 }

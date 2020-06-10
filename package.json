@@ -41,7 +41,7 @@
     "eject": "react-scripts eject",
     "serve": "REACT_APP_API_PORT=3001 nodemon server.js",
     "serve:prod": "REACT_APP_API_PORT=3000 node server.js",
-    "serve:debug": "nodemon --inspect server.js 3000"
+    "serve:debug": "REACT_APP_API_PORT=3001 nodemon --inspect server.js 3001"
   },
   "eslintConfig": {
     "extends": "react-app"

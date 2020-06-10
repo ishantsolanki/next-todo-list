@@ -36,3 +36,17 @@ export const updateTitleApi = ({
 
 export const addNewChecklistApi = (todoId: string) =>
   fetch(`${API_ENDPOINT}/addNewChecklist/${todoId}`)
+
+export const updateChecklistContentApi = ({
+  _id,
+  content,
+}: {
+  _id: string
+  content: string
+}) =>
+  fetch(`${API_ENDPOINT}/updateChecklistContent`, {
+    method: 'POST',
+    body: JSON.stringify({ _id, content }),
+    mode: corsMode,
+    headers,
+  })

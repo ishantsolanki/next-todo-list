@@ -22,6 +22,7 @@ const setupExpress = () => {
   app.get('/fetchTodos', todos.fetchTodos)
   app.get('/fetchTodo/:todoId', todos.fetchTodo)
   app.post('/updateTitle', todos.updateTitle)
+  app.post('/updateChecklistContent', todos.updateChecklistContent)
   app.get('/addNewChecklist/:todoId', todos.addNewChecklist)
 }
 
