@@ -33,3 +33,6 @@ export const updateTitleApi = ({
   _id: string
   title: string
 }) => fetch(`${API_ENDPOINT}/updateTitle`, options(_id, title))
+
+export const addNewChecklistApi = (todoId: string) =>
+  fetch(`${API_ENDPOINT}/addNewChecklist/${todoId}`)

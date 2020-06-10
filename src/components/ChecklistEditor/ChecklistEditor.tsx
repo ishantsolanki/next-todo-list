@@ -3,7 +3,10 @@ import { TodosType } from '../../types/Todos'
 import { connect } from 'react-redux'
 import { useDebounce } from 'use-debounce'
 
+import { addNewChecklistApi } from '../../redux/actions/api'
+
 import { updateTitle } from '../../redux/actions/todoActions'
+import ChecklistItem from '../ChecklistItem/ChecklistItem'
 
 const mapDispatchToProps = {
   updateTitleBound: updateTitle,
@@ -30,15 +33,19 @@ export const ChecklistEditor: React.FC<Props> = ({
   return (
     <>
       {todo && (
-        <>
-          title:{' '}
-          <input
-            type="text"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-        </>
+        <input
+          type="text"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
       )}
+      {todo &&
+        todo.checklist.map((listitem) => <ChecklistItem key={listitem._id} checklist={listitem} />)}
+      <div>
+        <button onClick={(event) => addNewChecklistApi(todo._id)}>
+          New item
+        </button>
+      </div>
     </>
   )
 }

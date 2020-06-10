@@ -1,12 +1,18 @@
 const mongoose = require('mongoose')
 var faker = require('faker')
 
+const checklistSchema = new mongoose.Schema({
+  content: String,
+  checked: Boolean,
+})
+
 const todosSchema = new mongoose.Schema({
   title: String,
-  checklist: [{ content: String, checked: Boolean }],
+  checklist: [checklistSchema],
 })
 
 const Todo = new mongoose.model('Todo', todosSchema)
+const Checklist = new mongoose.model('Checklist', checklistSchema)
 
 const createNewTodo = (req, res) => {
   new Todo({
@@ -33,8 +39,7 @@ const fetchTodos = (req, res) => {
 
 const fetchTodo = (req, res) => {
   const { todoId } = req.params
-  console.log(todoId)
-  Todo.findOne({ _id: todoId }, (err, result) => {
+  Todo.findById(todoId, (err, result) => {
     if (err) {
       res.sendStatus(400)
       return false
@@ -47,7 +52,7 @@ const fetchTodo = (req, res) => {
 const updateTitle = (req, res) => {
   const { _id, title } = req.body
 
-  Todo.findOneAndUpdate({ _id }, { title }).then(() => {
+  Todo.findByIdAndUpdate(_id, { title }).then(() => {
     Todo.findOne({ _id }, (err, result) => {
       if (err) {
         res.sendStatus(400)
@@ -59,9 +64,26 @@ const updateTitle = (req, res) => {
   })
 }
 
+const addNewChecklist = (req, res) => {
+  const { todoId } = req.params
+
+  Todo.findById(todoId, (err, todo) => {
+    if (err) {
+      res.sendStatus(400)
+      return false
+    }
+
+    todo.checklist.push(new Checklist({ content: '', checked: false }))
+    todo.save()
+
+    return res.json(todo)
+  })
+}
+
 module.exports = {
   createNewTodo,
   fetchTodos,
   fetchTodo,
   updateTitle,
+  addNewChecklist,
 }
