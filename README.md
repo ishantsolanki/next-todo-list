@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+Once cloned, run `yarn` to install the dependencies
+
 ### `yarn start`
 
 Runs the app in the development mode.<br />
@@ -12,33 +14,20 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-### `yarn test`
+### `yarn serve`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Run this command in a separate terminal keeping the client running.
 
-### `yarn build`
+The project is in no terms complete and only demonstrates a possible way of updating data in realtime.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I initially used redux but ended up not using it as it didnt turn out to be an optimal way to handle serverside live sync.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Hence, I reimplemented to using swr for achieving the same in considerably less amount of code.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Next steps
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Update the UI every time data changes. Currently it doesnt happen as you expect and would require refreshes.
+Update the UI. I didnt spend much time beautifying this thing.
+Unit tests. Since change of approach, I couldnt contribute much time in writing them.
+I would go on to add an offline mode if given more time. This is a perfect candidate for it.
+Also port it to react native.
